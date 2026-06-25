@@ -2,7 +2,7 @@
 //  View+UploadPicker.swift
 //  UploadFilePhotoKit
 //
-//  Created by Philip Lance Martinez
+//  Created by Toshiro
 //
 
 import SwiftUI

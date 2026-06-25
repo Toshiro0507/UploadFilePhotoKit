@@ -6,3 +6,11 @@ DerivedData/
 .swiftpm/
 *.o
 *.d
+
+# Toshiro — excluded AI tooling
+.claude/
+CLAUDE.md
+AI-SPEC.md
+.planning/
+*.ai-context
+

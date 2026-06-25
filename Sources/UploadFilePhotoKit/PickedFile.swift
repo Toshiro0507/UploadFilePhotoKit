@@ -2,7 +2,7 @@
 //  PickedFile.swift
 //  UploadFilePhotoKit
 //
-//  Created by Philip Lance Martinez
+//  Created by Toshiro
 //
 
 import Foundation

@@ -107,4 +107,4 @@ func uploadPicker(
 
 ## License
 
-Copyright © 2026 Philip Lance Martinez. Use permitted; modification and redistribution prohibited. See [LICENSE](LICENSE) for full terms.
+Copyright © 2026 Toshiro. Use permitted; modification and redistribution prohibited. See [LICENSE](LICENSE) for full terms.

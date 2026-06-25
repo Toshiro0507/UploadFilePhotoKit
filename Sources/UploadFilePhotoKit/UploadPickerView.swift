@@ -2,7 +2,7 @@
 //  UploadPickerView.swift
 //  UploadFilePhotoKit
 //
-//  Created by Philip Lance Martinez
+//  Created by Toshiro
 //
 
 import SwiftUI
@@ -16,11 +16,6 @@ public struct UploadPickerView: View {
     let onCancel: () -> Void
 
     @State private var activeSheet: ActiveSheet?
-
-    private enum ActiveSheet: Identifiable {
-        case gallery, fileManager
-        var id: Self { self }
-    }
 
     public init(
         source: UploadSource,
@@ -37,43 +32,20 @@ public struct UploadPickerView: View {
     }
 
     public var body: some View {
-        Color.clear
-            .frame(width: 0, height: 0)
-            .onAppear { launch() }
-            .confirmationDialog("Choose Upload Source", isPresented: confirmationBinding, titleVisibility: .visible) {
-                Button("Gallery") { activeSheet = .gallery }
-                Button("File Manager") { activeSheet = .fileManager }
-                Button("Cancel", role: .cancel) { onCancel() }
-            }
-            .sheet(item: $activeSheet) { sheet in
-                switch sheet {
-                case .gallery:
-                    GalleryPickerView(
-                        selectionLimit: selectionLimit,
-                        onPick: { files in
-                            activeSheet = nil
-                            onPick(files)
-                        },
-                        onCancel: {
-                            activeSheet = nil
-                            onCancel()
-                        }
-                    )
-                case .fileManager:
-                    DocumentPickerView(
-                        allowedTypes: allowedDocumentTypes,
-                        allowsMultiple: selectionLimit != 1,
-                        onPick: { files in
-                            activeSheet = nil
-                            onPick(files)
-                        },
-                        onCancel: {
-                            activeSheet = nil
-                            onCancel()
-                        }
-                    )
-                }
-            }
+        PickerPresentationHost(
+            activeSheet: $activeSheet,
+            selectionLimit: selectionLimit,
+            allowedDocumentTypes: allowedDocumentTypes,
+            onPick: onPick,
+            onCancel: onCancel
+        )
+        .frame(width: 0, height: 0)
+        .onAppear { launch() }
+        .confirmationDialog("Choose Upload Source", isPresented: confirmationBinding, titleVisibility: .visible) {
+            Button("Gallery") { activeSheet = .gallery }
+            Button("File Manager") { activeSheet = .fileManager }
+            Button("Cancel", role: .cancel) { onCancel() }
+        }
     }
 
     private var confirmationBinding: Binding<Bool> {
@@ -85,9 +57,9 @@ public struct UploadPickerView: View {
 
     private func launch() {
         switch source {
-        case .gallery:      activeSheet = .gallery
-        case .fileManager:  activeSheet = .fileManager
-        case .both:         break
+        case .gallery:     activeSheet = .gallery
+        case .fileManager: activeSheet = .fileManager
+        case .both:        break
         }
     }
 }
