@@ -89,7 +89,7 @@ UploadPickerView(
 | `fileName` | `String` | File name with extension |
 | `fileExtension` | `String` | Lowercased extension (e.g. `"pdf"`) |
 | `mimeType` | `String` | MIME type (e.g. `"image/png"`) |
-| `fileSize` | `String` | Human-readable size (e.g. `"1.2 MB"`) |
+| `fileSize` | `Int` | File size in bytes |
 | `base64String` | `String` | Base64-encoded file content |
 
 ### `.uploadPicker(...)` modifier

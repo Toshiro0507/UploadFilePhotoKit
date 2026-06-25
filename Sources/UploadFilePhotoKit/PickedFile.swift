@@ -15,7 +15,7 @@ import UniformTypeIdentifiers
     public let fileName: String
     public let fileExtension: String
     public let mimeType: String
-    public let fileSize: String
+    public let fileSize: Int
     public let base64String: String
 
     public init(url: URL? = nil, data: Data, fileName: String, fileExtension: String, mimeType: String) {
@@ -25,7 +25,7 @@ import UniformTypeIdentifiers
         self.fileName = fileName
         self.fileExtension = fileExtension
         self.mimeType = mimeType
-        self.fileSize = ByteCountFormatter.string(fromByteCount: Int64(data.count), countStyle: .file)
+        self.fileSize = data.count
         self.base64String = data.base64EncodedString()
     }
 }
