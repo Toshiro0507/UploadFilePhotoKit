@@ -15,7 +15,7 @@ public extension View {
         selectionLimit: Int = 1,
         allowedDocumentTypes: [UTType] = [.pdf, .image, .spreadsheet, .presentation, .text],
         sizeLimit: Int? = nil,
-        hasError: Binding<Bool> = .constant(false),
+        hasError: @escaping ([PickedFile]) -> Void = { _ in },
         onPick: @escaping ([PickedFile]) -> Void,
         onCancel: @escaping () -> Void = {}
     ) -> some View {
@@ -27,10 +27,14 @@ public extension View {
                     allowedDocumentTypes: allowedDocumentTypes,
                     onPick: { files in
                         isPresented.wrappedValue = false
-                        if let limit = sizeLimit, files.contains(where: { $0.fileSize > limit }) {
-                            hasError.wrappedValue = true
+                        if let limit = sizeLimit {
+                            let oversized = files.filter { $0.fileSize > limit }
+                            if oversized.isEmpty {
+                                onPick(files)
+                            } else {
+                                hasError(oversized)
+                            }
                         } else {
-                            hasError.wrappedValue = false
                             onPick(files)
                         }
                     },
