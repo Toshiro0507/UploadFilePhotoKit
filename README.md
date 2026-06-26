@@ -101,24 +101,25 @@ func uploadPicker(
     selectionLimit: Int = 1,
     allowedDocumentTypes: [UTType] = [.pdf, .image, .spreadsheet, .presentation, .text],
     sizeLimit: Int? = nil,
-    hasError: @escaping ([PickedFile]) -> Void = { _ in },
-    onPick: @escaping ([PickedFile]) -> Void,
+    onPick: @escaping ([PickedFile], Bool) -> Void,
     onCancel: @escaping () -> Void = {}
 ) -> some View
 ```
 
-`sizeLimit` is in bytes. If any picked file exceeds it, `hasError` is called with the oversized files and `onPick` is suppressed. If `sizeLimit` is `nil`, `hasError` is never called.
+`sizeLimit` is in bytes. `onPick` always fires — `hasError` is `true` if any file exceeds the limit, `false` otherwise. If `sizeLimit` is `nil`, `hasError` is always `false`.
 
 ```swift
-// Example: 5 MB limit
 .uploadPicker(
     isPresented: $showPicker,
     source: .both,
     sizeLimit: 5 * 1024 * 1024,
-    hasError: { oversizedFiles in
-        print("\(oversizedFiles.count) file(s) exceeded the size limit")
-    },
-    onPick: { files in ... }
+    onPick: { files, hasError in
+        if hasError {
+            // at least one file exceeded 5 MB
+        } else {
+            // all files are within the limit
+        }
+    }
 )
 ```
 

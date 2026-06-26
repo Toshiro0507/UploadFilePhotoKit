@@ -15,8 +15,7 @@ public extension View {
         selectionLimit: Int = 1,
         allowedDocumentTypes: [UTType] = [.pdf, .image, .spreadsheet, .presentation, .text],
         sizeLimit: Int? = nil,
-        hasError: @escaping ([PickedFile]) -> Void = { _ in },
-        onPick: @escaping ([PickedFile]) -> Void,
+        onPick: @escaping ([PickedFile], Bool) -> Void,
         onCancel: @escaping () -> Void = {}
     ) -> some View {
         self.overlay {
@@ -27,16 +26,10 @@ public extension View {
                     allowedDocumentTypes: allowedDocumentTypes,
                     onPick: { files in
                         isPresented.wrappedValue = false
-                        if let limit = sizeLimit {
-                            let oversized = files.filter { $0.fileSize > limit }
-                            if oversized.isEmpty {
-                                onPick(files)
-                            } else {
-                                hasError(oversized)
-                            }
-                        } else {
-                            onPick(files)
-                        }
+                        let hasError = sizeLimit.map { limit in
+                            files.contains { $0.fileSize > limit }
+                        } ?? false
+                        onPick(files, hasError)
                     },
                     onCancel: {
                         isPresented.wrappedValue = false
